@@ -16,15 +16,17 @@ router = APIRouter(prefix="/api/user", tags=["users"])
 @router.post("/register")
 async def register(user_data: UserRequest, db: AsyncSession = Depends(get_db)):
     """
-    {
-      "username": "chenhaojun",
-      "password": "123456"
-    }
-    报错什么longer 降级 pip install bcrypt==4.3.0
+
     :param user_data:
     :param db:
     :return:
     """
+    # {
+    #     "username": "chenhaojun",
+    #     "password": "123456"
+    # }
+    # 如果有报错什么 longer 降级 pip install bcrypt == 4.3.0
+
     #  注册逻辑：验证用户是否存在 -> 创建用户 -> 生成token -> 响应结果
     existing = await users.get_user_by_username(db, user_data.username)
     if existing:
