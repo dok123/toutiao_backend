@@ -28,3 +28,13 @@
     同源的三个条件：协议、域名、端口
     CORS中间件：
         CROS：让后端主动告诉浏览器：这个前端“允许访问”
+passlib 密码加密
+    安装
+        pip install "passlib[bcrypt]==1.7.4"
+        # passlib：哈希算法，bcrypt：依赖算法
+    创建密码上下文
+        pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        依赖于 CryptContext ，参数一是加密算法（schemes=["bcrypt"]），参数二指代是新旧加密算法，可以自动兼容，自动适应
+    加密或校验
+        pwd_context.hash(password)  # 传入明文 password 得到加密结果
+        pwd_context.verify(plain_password, hashed_password)  # verify方法校验明文和密文是否一致

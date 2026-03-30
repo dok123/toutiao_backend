@@ -1,0 +1,13 @@
+# @Time : 2026/3/30 0030 22:21
+# @Author : HaoJun Chen
+# @APP : PyCharm
+
+from passlib.context import CryptContext
+
+# 创建密码上下文
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+# 密码加密
+def get_hash_password(password: str):
+    return pwd_context.hash(password)
