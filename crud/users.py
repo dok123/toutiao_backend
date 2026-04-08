@@ -90,3 +90,16 @@ async def update_user_info(db: AsyncSession, username: str, user_data: UpdateUse
     # 获取 更新后的用户
     updated_user = await get_user_by_username(db, username)
     return updated_user
+
+
+# 修改密码： 验证旧密码 -> 新密码 -> 修改密码
+async def change_password(db: AsyncSession, user: User, old_password: str, new_password: str):
+    if not security.verify_password(old_password, user.password):
+        return False
+
+    hashed_new_pwd = security.get_hash_password(new_password)
+    user.password = hashed_new_pwd
+    db.add(user)  # 最好加上这个，由SQLAlchemy 真正接管这个 User 对象，确保可以 commit。规避 session 过期或关闭导致的不能提交的问题
+    await db.commit()
+    await db.refresh(user)
+    return True
