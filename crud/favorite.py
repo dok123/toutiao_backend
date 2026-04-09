@@ -1,7 +1,7 @@
 # @Time : 2026/4/8 0008 21:49
 # @Author : HaoJun Chen
 # @APP : PyCharm
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.favorite import Favorite
@@ -16,3 +16,27 @@ async def is_news_favorite(
     result = await db.execute(query)
     # 是否有收藏记录
     return result.scalar_one_or_none() is not None
+
+
+async def add_news_favorite(
+        db: AsyncSession,
+        user_id: int,
+        news_id: int
+):
+    favorite = Favorite(user_id=user_id, news_id=news_id)
+    db.add(favorite)
+    await db.commit()
+    await db.refresh(favorite)
+    return favorite
+
+
+async def remove_news_favorite(
+        db: AsyncSession,
+        user_id: int,
+        news_id: int
+):
+    stmt = delete(Favorite).where(Favorite.news_id == news_id, Favorite.user_id == user_id)
+    result = await db.execute(stmt)
+    await db.commit()
+
+    return result.rowcount > 0
