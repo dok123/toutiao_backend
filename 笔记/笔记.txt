@@ -38,3 +38,12 @@ passlib 密码加密
     加密或校验
         pwd_context.hash(password)  # 传入明文 password 得到加密结果
         pwd_context.verify(plain_password, hashed_password)  # verify方法校验明文和密文是否一致
+ORM 联表查询的写法
+    select(查询的主题类模型, 字段重命名)join(join的模型类, join的条件)
+    select(
+        News,
+        Favorite.created_at.label("favorite_time"),
+        Favorite.id.label("favorite_id")
+    ).join(Favorite, Favorite.news_id == News.id)
+模型类中，UniqueConstraint 的作用
+    唯一约束
