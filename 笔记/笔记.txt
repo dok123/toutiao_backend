@@ -47,3 +47,5 @@ ORM 联表查询的写法
     ).join(Favorite, Favorite.news_id == News.id)
 模型类中，UniqueConstraint 的作用
     唯一约束
+安装redis
+    pip install redis (内置支持异步，使用：import redis.asyncio as redis)
