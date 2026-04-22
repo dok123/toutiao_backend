@@ -1,6 +1,8 @@
 # @Time : 2026/4/20 0020 23:11
 # @Author : HaoJun Chen
 # @APP : PyCharm
+import json
+from typing import Any
 
 import redis.asyncio as redis
 
@@ -15,3 +17,39 @@ redis_client = redis.Redis(
     db=REDIS_DB,  # Redis 数据库编号， 0~15
     decode_responses=True  # 是否将字节数据解码为字符串
 )
+
+
+# 设置 和 读取 （字符串 和 列表或字典）
+# 读取： 字符串
+async def get_cache(key: str):
+    try:
+        return await redis_client.get(key)
+    except Exception as e:
+        print(f"获取缓存失败: {e}")
+        return None
+
+
+# 读取：列表或字典
+async def get_json_cache(key: str):
+    try:
+        data = json.loads(await redis_client.get(key))
+        if data:
+            return data
+        return None
+    except Exception as e:
+        print(f"获取 JSON 缓存失败: {e}")
+        return None
+
+
+# 设置缓存 setex(key, expire, value)
+async def set_cache(key: str, value: Any, expire: int = 3600):
+    try:
+        if isinstance(value, (dict, list)):  # 判断 value 是否为字典或列表
+            value = json.dumps(value, ensure_ascii=False)
+            print("333333333333333333")
+        print("4444444444")
+        await redis_client.setex(key, expire, value)
+        return True
+    except Exception as e:
+        print(f"设置缓存失败: {e}")
+        return False
