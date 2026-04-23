@@ -49,3 +49,4 @@ ORM 联表查询的写法
     唯一约束
 安装redis
     pip install redis (内置支持异步，使用：import redis.asyncio as redis)
+问题：新闻列表，前端没有正常请求第二页，而是第一页请求了两次，缓存也没有正常写入第二页

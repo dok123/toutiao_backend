@@ -46,8 +46,6 @@ async def set_cache(key: str, value: Any, expire: int = 3600):
     try:
         if isinstance(value, (dict, list)):  # 判断 value 是否为字典或列表
             value = json.dumps(value, ensure_ascii=False)
-            print("333333333333333333")
-        print("4444444444")
         await redis_client.setex(key, expire, value)
         return True
     except Exception as e:
